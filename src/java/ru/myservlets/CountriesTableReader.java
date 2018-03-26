@@ -23,18 +23,14 @@ public class CountriesTableReader {
 
     /**
      * Основной алгоритм работы нити
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
 
-    public void readData() {
-        try {
-            connect();
-            readCountriesTable();
-            disconnect();
-        } catch (Exception e){
-            System.out.println("Ошибка загрузки из таблицы \"Страны\"");
-        }
-
-
+    public void readData() throws ClassNotFoundException, SQLException {        
+        connect();
+        readCountriesTable();
+        disconnect();          
     }
 
     /**
@@ -49,6 +45,12 @@ public class CountriesTableReader {
 //    }
     private void connect() throws ClassNotFoundException {
         try {
+                Class.forName("com.mysql.jdbc.Driver");//требуется чтобы 
+                /*
+                когда используете JDBC не забывайте загружать драйвера таким 
+                образом т.к. DriverManager.getConnection() ищет драйверы среди
+                загруженных классов, а не пытается загрузить их сам.
+                */
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase?useSSL=no","root","123456");
                 stmt = connection.createStatement();
             }
